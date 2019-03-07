@@ -42,7 +42,22 @@ export default class App extends Component {
       '商品8',
       '商品9',
       '商品10',
-    ])
+    ]),
+    advertisements: [
+      {
+        title: '广告1',
+        backgroundColor: 'gray',
+      },
+      {
+        title: '广告2',
+        backgroundColor: 'orange',
+      },
+      {
+        title: '广告3',
+        backgroundColor: 'yellow',
+      },
+    ],
+    searchText: '',
   }
 
   componentDidMount() {
@@ -88,11 +103,14 @@ export default class App extends Component {
             <TextInput
                 style={styles.input}
                 placeholder='搜索商品'
+                onChangeText={(text) => {
+                  this.setState({searchText:text})
+                }}
             ></TextInput>
             <Button
                 style={styles.button}
                 title='搜索'
-                onPress={() => Alert.alert('click', null, null)}
+                onPress={() => Alert.alert('搜索内容'+this.state.searchText, null, null)}
             ></Button>
           </View>
           <View style={styles.advertisement}>
@@ -102,31 +120,22 @@ export default class App extends Component {
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled={true}
             >
-              <TouchableHighlight
-                  onPress={() => Alert.alert('guang gao', null, null)}
-              >
-                <Text style={{
-                  width: Dimensions.get('window').width,
-                  height: 180,
-                  backgroundColor: 'gray',
-                }}>
-                  广告1
-                </Text>
-              </TouchableHighlight>
-              <Text style={{
-                width: Dimensions.get('window').width,
-                height: 180,
-                backgroundColor: 'orange',
-              }}>
-                广告2
-              </Text>
-              <Text style={{
-                width: Dimensions.get('window').width,
-                height: 180,
-                backgroundColor: 'yellow',
-              }}>
-                广告3
-              </Text>
+              {
+                this.state.advertisements.map((advertisement, index) => {
+                  return (
+                      <TouchableHighlight
+                          key={index}
+                          onPress={() => Alert.alert('guang gao', null, null)}
+                      >
+                        <Text style={[styles.advertisementContent, {
+                          backgroundColor: advertisement.backgroundColor,
+                        }]}>
+                          {advertisement.title}
+                        </Text>
+                      </TouchableHighlight>
+                  )
+                })
+              }
             </ScrollView>
           </View>
           <View style={styles.products}>
@@ -143,17 +152,18 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   searchbar: {
     marginTop: Platform.OS === 'ios' ? 20 : 0,
     height: 40,
     flexDirection: 'row',
-    backgroundColor: 'red',
   },
   input: {
     flex: 1,
     borderColor: 'gray',
     borderWidth: 2,
+    borderRadius: 10,
   },
   button: {
     flex: 1,
@@ -169,5 +179,9 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  advertisementContent: {
+    width: Dimensions.get('window').width,
+    height: 180,
+  },
 });
